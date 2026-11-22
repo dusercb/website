@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lumina</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Portrait retouching that runs entirely on your phone: smoothing, blemishes, eraser, stamp, wrinkles, concealer, matte, eyes, teeth, skin tone, fillers, sculpt, reshape, body, makeup, hair, relight, background, filters, adjust, glitter, crop and text.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bodoni+Moda:ital,opsz,wght@1,6..96,500&family=Pacifico&family=Playfair+Display:ital,wght@1,600&display=swap">
+<style id="standalone-reset">
+  /* Same reset the artifact viewer adds; the artifact build drops this block. */
+  :root { color-scheme: light; box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<style>
+  /* Layout (after AirBrush's editor, see evidence/README.md §6): a slim top bar, the photo filling
+     the rest, and a fixed-height panel underneath. The panel holds one scrolling row (tools, or the
+     open tool's options) over a 48px bar (tool groups, or ✗ · tabs · ✓). Sliders, option chips and
+     the compare buttons float over the bottom of the photo. */
+  :root {
+    --canvas: #ecebef;
+    --surface: #ffffff;
+    --surface-2: #f1f0f4;
+    --ink: #1c1a1f;
+    --ink-2: #4a4650;
+    --ink-3: #8c8893;
+    --line: rgba(24, 18, 28, 0.09);
+    --accent: #e0245e;
+    --accent-ink: #ffffff;
+    --accent-soft: rgba(224, 36, 94, 0.11);
+    --ok: #1d8a5a;
+    --warn: #b0650f;
+    --glass: rgba(255, 255, 255, 0.82);
+    --glass-line: rgba(24, 18, 28, 0.08);
+    --chip-on: #ffffff;
+    --scrim: rgba(24, 18, 28, 0.32);
+    --shadow: 0 1px 2px rgba(24, 18, 28, 0.06), 0 6px 22px rgba(24, 18, 28, 0.12);
+    --ring: #ffffff;
+    --ring-shade: rgba(0, 0, 0, 0.45);
+    --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mark: "Bodoni Moda", "Bodoni 72", Didot, "Times New Roman", serif;
+    --row-h: 92px;
+    --bar-h: 48px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --canvas: #060507;
+      --surface: #141316;
+      --surface-2: #242228;
+      --ink: #f4f2f6;
+      --ink-2: #c6c1cc;
+      --ink-3: #8b8592;
+      --line: rgba(255, 255, 255, 0.08);
+      --accent: #ff5c8d;
+      --accent-ink: #1b0710;
+      --accent-soft: rgba(255, 92, 141, 0.16);
+      --ok: #5fd39b;
+      --warn: #f2b45f;
+      --glass: rgba(32, 30, 36, 0.74);
+      --glass-line: rgba(255, 255, 255, 0.09);
+      --chip-on: #46424c;
+      --scrim: rgba(0, 0, 0, 0.55);
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 8px 26px rgba(0, 0, 0, 0.45);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --canvas: #060507;
+    --surface: #141316;
+    --surface-2: #242228;
+    --ink: #f4f2f6;
+    --ink-2: #c6c1cc;
+    --ink-3: #8b8592;
+    --line: rgba(255, 255, 255, 0.08);
+    --accent: #ff5c8d;
+    --accent-ink: #1b0710;
+    --accent-soft: rgba(255, 92, 141, 0.16);
+    --ok: #5fd39b;
+    --warn: #f2b45f;
+    --glass: rgba(32, 30, 36, 0.74);
+    --glass-line: rgba(255, 255, 255, 0.09);
+    --chip-on: #46424c;
+    --scrim: rgba(0, 0, 0, 0.55);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 8px 26px rgba(0, 0, 0, 0.45);
+    color-scheme: dark;
+  }
+
+  html, body { height: 100%; }
+  body {
+    background: var(--surface);
+    color: var(--ink);
+    font-family: var(--font-ui);
+    font-size: 14px;
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  button, input, label { font: inherit; color: inherit; }
+  button { cursor: pointer; touch-action: manipulation; }
+  button:disabled { cursor: default; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  svg.i { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+  .app {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 50px;
+    padding-left: max(8px, env(safe-area-inset-left, 0px));
+    padding-right: max(10px, env(safe-area-inset-right, 0px));
+    background: var(--surface);
+  }
+  .open {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 38px;
+    min-width: 40px;
+    padding: 0 8px;
+    border-radius: 19px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13.5px;
+  }
+  .open svg.i { width: 23px; height: 23px; }
+  .open .label { display: none; }
+  .open.labelled { background: var(--surface-2); padding: 0 13px 0 10px; }
+  .open.labelled .label { display: inline; }
+  .mark {
+    flex: 1;
+    min-width: 0;
+    margin: 0 6px;
+    text-align: center;
+    font-family: var(--font-mark);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .icon-btn {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 20px;
+    background: transparent;
+    flex: none;
+  }
+  .icon-btn svg.i { width: 22px; height: 22px; }
+  .icon-btn:disabled { opacity: 0.28; }
+  .save {
+    flex: none;
+    margin-left: 4px;
+    height: 34px;
+    padding: 0 17px;
+    border: 0;
+    border-radius: 17px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+  }
+  @media (max-width: 349px) {
+    .mark { font-size: 0; margin: 0; }
+    .topbar .spacer { flex: 1; }
+  }
+
+  /* ---------- stage ---------- */
+  .stage {
+    position: relative;
+    background: var(--canvas);
+    overflow: hidden;
+    touch-action: none;
+  }
+  .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .glass {
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(18px) saturate(1.5);
+    backdrop-filter: blur(18px) saturate(1.5);
+    box-shadow: 0 0 0 0.5px var(--glass-line), var(--shadow);
+    color: var(--ink);
+  }
+  .pill-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    min-height: 30px;
+    padding: 5px 13px;
+    border-radius: 15px;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    max-width: 100%;
+  }
+  .status { position: absolute; top: 10px; left: max(12px, env(safe-area-inset-left, 0px)); pointer-events: none; }
+  .status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-3); flex: none; }
+  .status[data-state="ready"] .dot { background: var(--ok); }
+  .status[data-state="none"] .dot, .status[data-state="error"] .dot { background: var(--warn); }
+  .status[data-state="loading"] .dot { background: var(--accent); animation: blink 1s ease-in-out infinite; }
+  .before {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .toast {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100% - 24px);
+    text-wrap: balance;
+    z-index: 3;
+    animation: drop 0.22s ease-out both;
+  }
+
+  /* Floating controls at the bottom of the photo. */
+  .float {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    display: grid;
+    justify-items: center;
+    gap: 8px;
+    padding-left: max(12px, env(safe-area-inset-left, 0px));
+    padding-right: max(12px, env(safe-area-inset-right, 0px));
+    pointer-events: none;
+  }
+  .float > * { pointer-events: auto; }
+  .float .pill-note { pointer-events: none; }
+  .chips {
+    display: flex;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 18px;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .chips::-webkit-scrollbar { display: none; }
+  .chips button {
+    flex: none;
+    height: 28px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .chips button[aria-pressed="true"] { background: var(--chip-on); color: var(--ink); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.14); }
+  .slider {
+    width: min(100%, 460px);
+    height: 42px;
+    border-radius: 21px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) 2.7em;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px 0 16px;
+  }
+  .slider label { font-size: 12.5px; font-weight: 600; white-space: nowrap; max-width: 8.5em; overflow: hidden; text-overflow: ellipsis; }
+  .slider output { text-align: right; font-size: 12.5px; font-weight: 650; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+  input[type="range"] {
+    --a: 0%;
+    --b: 0%;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 32px;
+    margin: 0;
+    background: transparent;
+    touch-action: none;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--line) var(--a), var(--accent) var(--a) var(--b), var(--line) var(--b));
+  }
+  input[type="range"]::-moz-range-track {
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--line) var(--a), var(--accent) var(--a) var(--b), var(--line) var(--b));
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    margin-top: -9.5px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 0;
+    box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 0;
+    box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.25);
+  }
+  .glass input[type="range"]::-webkit-slider-runnable-track {
+    background: linear-gradient(90deg, rgba(128, 122, 134, 0.35) var(--a), var(--accent) var(--a) var(--b), rgba(128, 122, 134, 0.35) var(--b));
+  }
+  .glass input[type="range"]::-moz-range-track {
+    background: linear-gradient(90deg, rgba(128, 122, 134, 0.35) var(--a), var(--accent) var(--a) var(--b), rgba(128, 122, 134, 0.35) var(--b));
+  }
+
+  /* bottom is set by script, just above whatever floats at the bottom of the photo */
+  .side {
+    position: absolute;
+    right: max(12px, env(safe-area-inset-right, 0px));
+    bottom: 10px;
+    display: grid;
+    gap: 10px;
+    justify-items: center;
+  }
+  .fit { position: absolute; left: max(12px, env(safe-area-inset-left, 0px)); bottom: 10px; }
+  .round {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    padding: 0;
+    touch-action: none;
+  }
+  .round svg.i { width: 21px; height: 21px; }
+  .round[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+  .brush-cursor {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    border: 1.5px solid var(--ring);
+    box-shadow: 0 0 0 1px var(--ring-shade), inset 0 0 0 1px var(--ring-shade);
+    background: rgba(255, 255, 255, 0.12);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+  }
+  /* Makeup › Fine-tune: one dot per part; dragging it moves that part's makeup. */
+  .tune-dots { position: absolute; inset: 0; pointer-events: none; }
+  .tune-dots i {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 2px #fff, 0 1px 6px rgba(0, 0, 0, 0.45);
+  }
+  .tune-dots i.on { width: 24px; height: 24px; margin: -12px 0 0 -12px; }
+  .light-handle {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    margin: -17px 0 0 -17px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fffdf6 0 28%, rgba(255, 244, 214, 0.75) 40%, rgba(255, 236, 190, 0) 70%);
+    box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.9), 0 0 18px 6px rgba(255, 240, 200, 0.55);
+    pointer-events: none;
+  }
+  /* On-photo handles: crop frame, Stretch's band, the stamp's source, the prism focus, and the
+     frame around a selected text or added person. Placed by script in stage pixels. */
+  .crop-box {
+    position: absolute;
+    border: 1.5px solid #ffffff;
+    box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.5), inset 0 0 0 0.5px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+  }
+  .crop-box::before, .crop-box::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 0 solid rgba(255, 255, 255, 0.45);
+  }
+  .crop-box::before { left: 33.33%; right: 33.33%; border-width: 0 1px; }
+  .crop-box::after { top: 33.33%; bottom: 33.33%; border-width: 1px 0; }
+  .crop-box i {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 0 solid #ffffff;
+  }
+  .crop-box i:nth-child(1) { left: -4px; top: -4px; border-width: 4px 0 0 4px; }
+  .crop-box i:nth-child(2) { right: -4px; top: -4px; border-width: 4px 4px 0 0; }
+  .crop-box i:nth-child(3) { left: -4px; bottom: -4px; border-width: 0 0 4px 4px; }
+  .crop-box i:nth-child(4) { right: -4px; bottom: -4px; border-width: 0 4px 4px 0; }
+  .band-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0;
+    border-top: 1.5px dashed #ffffff;
+    filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.7));
+    pointer-events: none;
+  }
+  .band-line::after {
+    content: "";
+    position: absolute;
+    right: max(14px, env(safe-area-inset-right, 0px));
+    top: -12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  }
+  .band-fill {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+  }
+  .marker {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    margin: -15px 0 0 -15px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), inset 0 0 0 1px rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+  }
+  .marker::before, .marker::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.5);
+  }
+  .marker::before { width: 2px; height: 12px; margin: -6px 0 0 -1px; }
+  .marker::after { width: 12px; height: 2px; margin: -1px 0 0 -6px; }
+  .sel-box {
+    position: absolute;
+    border: 1.5px dashed #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    transform-origin: center;
+  }
+  .busy {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background: var(--scrim);
+    z-index: 4;
+  }
+  .busy .pill-note { min-height: 42px; padding: 10px 18px; border-radius: 21px; font-size: 13.5px; }
+  .spinner {
+    width: 17px;
+    height: 17px;
+    flex: none;
+    border-radius: 50%;
+    border: 2.4px solid var(--accent-soft);
+    border-top-color: var(--accent);
+    animation: spin 0.8s linear infinite;
+  }
+  .fatal {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 24px max(16px, env(safe-area-inset-left, 0px));
+    text-align: center;
+  }
+  .fatal p { max-width: 34ch; margin: 0 auto; color: var(--ink-2); line-height: 1.5; }
+  .fatal strong { display: block; color: var(--ink); font-size: 16px; margin-bottom: 6px; }
+
+  /* ---------- panel ---------- */
+  .panel {
+    display: grid;
+    grid-template-rows: var(--row-h) var(--bar-h);
+    background: var(--surface);
+    box-shadow: 0 -0.5px 0 var(--line);
+    min-width: 0;
+  }
+  .row, .tabs {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent);
+    min-width: 0;
+  }
+  .row::-webkit-scrollbar, .tabs::-webkit-scrollbar { display: none; }
+  .row.dragging, .tabs.dragging, .chips.dragging { cursor: grabbing; user-select: none; }
+  .row {
+    gap: 2px;
+    padding-left: max(10px, env(safe-area-inset-left, 0px));
+    padding-right: max(10px, env(safe-area-inset-right, 0px));
+    scroll-padding-inline: 16px;
+  }
+  /* Few options sit centred; many scroll from the left edge. */
+  .row > :first-child, .tabs > :first-child { margin-left: auto; }
+  .row > :last-child, .tabs > :last-child { margin-right: auto; }
+  .row.swap { animation: rise 0.22s ease-out both; }
+
+  .it {
+    flex: none;
+    position: relative;
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 6px;
+    width: 66px;
+    height: 86px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink-2);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    cursor: pointer;
+    transition: transform 0.12s ease;
+  }
+  .it:active { transform: scale(0.93); }
+  .it:disabled { opacity: 0.32; cursor: default; }
+  .it:disabled:active { transform: none; }
+  .it .lb { max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.2; }
+  .it .ic {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--surface-2);
+    color: var(--ink);
+  }
+  .it .ic svg.i { width: 22px; height: 22px; }
+  .it[aria-pressed="true"] { color: var(--accent); }
+  .it[aria-pressed="true"] .ic { background: var(--accent-soft); color: var(--accent); }
+  .it .dot { position: absolute; left: 50%; bottom: 5px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--accent); }
+  .it .ring { position: absolute; inset: -4px; width: 54px; height: 54px; transform: rotate(-90deg); pointer-events: none; }
+  .it .ring circle { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; }
+
+  /* Main tool row: bare icons, AirBrush-style. */
+  .it.tool { width: 68px; gap: 7px; color: var(--ink-2); }
+  .it.tool .ic { width: 44px; height: 36px; border-radius: 12px; background: none; }
+  .it.tool .ic svg.i { width: 27px; height: 27px; stroke-width: 1.55; }
+  .it.tool[data-dim="true"] { opacity: 0.38; }
+
+  /* Colour swatches */
+  .it.sw .ic { width: 40px; height: 40px; background: var(--sw, var(--surface-2)); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12); }
+  .it.sw.grad .ic { background: linear-gradient(160deg, var(--sw), var(--sw2)); }
+  .it.sw.square .ic { border-radius: 11px; }
+  .it.sw[aria-pressed="true"] .ic { background: var(--sw, var(--surface-2)); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12), 0 0 0 2.5px var(--surface), 0 0 0 4.5px var(--accent); }
+  .it.sw.grad[aria-pressed="true"] .ic { background: linear-gradient(160deg, var(--sw), var(--sw2)); }
+  /* A hair colour's ramp: highlight, the shade, shadow. */
+  .it.sw.ramp .ic, .it.sw.ramp[aria-pressed="true"] .ic { background: linear-gradient(150deg, var(--sw3) 4%, var(--sw) 48%, var(--sw2) 96%); }
+  .it.sw.blank .ic { color: var(--ink-2); }
+  .it.sw.blank .ic svg.i { width: 20px; height: 20px; }
+
+  /* Photo thumbnails: your own photo with each filter, look or light. */
+  .it.th { width: 64px; gap: 0; }
+  .it.th .ic {
+    width: 60px;
+    height: 78px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--surface-2);
+  }
+  .it.th.square .ic { height: 60px; }
+  .it.th canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .it.th .ic::after {
+    content: "";
+    position: absolute;
+    inset: 45% 0 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+  }
+  .it.th .lb {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: 10px;
+    z-index: 1;
+    max-width: none;
+    color: #ffffff;
+    font-size: 10px;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  .it.th.square .lb { bottom: 19px; }
+  .it.th .ic svg.i { position: relative; z-index: 1; width: 22px; height: 22px; color: var(--ink-2); margin-bottom: 14px; }
+  .it.th[aria-pressed="true"] .ic { background: var(--surface-2); color: inherit; box-shadow: inset 0 0 0 2px var(--accent); }
+  .it.th[aria-pressed="true"] .ic::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: 12px;
+    box-shadow: inset 0 0 0 2px var(--accent), inset 0 0 0 3.5px rgba(255, 255, 255, 0.85);
+  }
+  .divider { flex: none; width: 1px; height: 34px; margin: 0 6px 16px; background: var(--line); }
+
+  /* Bar: tool groups on the main screen; ✗ · tabs or title · ✓ inside a tool. */
+  .bar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    box-shadow: 0 -0.5px 0 var(--line);
+    min-width: 0;
+  }
+  .app[data-view="tool"] .bar { grid-template-columns: 52px minmax(0, 1fr) 52px; }
+  .bar-btn {
+    display: grid;
+    place-items: center;
+    border: 0;
+    background: none;
+    color: var(--ink);
+  }
+  .bar-btn svg.i { width: 23px; height: 23px; stroke-width: 2; }
+  .tabs { gap: 2px; padding: 0 6px; height: 100%; }
+  .tab {
+    flex: none;
+    position: relative;
+    height: 100%;
+    padding: 0 11px;
+    border: 0;
+    background: none;
+    color: var(--ink-3);
+    font-size: 13.5px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .tab[aria-selected="true"] { color: var(--ink); }
+  .tab[aria-selected="true"]::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 7px;
+    width: 18px;
+    height: 2.5px;
+    margin-left: -9px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .tab .dot { position: absolute; top: 12px; right: 4px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+  .bar-title {
+    align-self: center;
+    margin: 0;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 650;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: grid;
+    place-items: center;
+    background: var(--scrim);
+    padding: 24px max(16px, env(safe-area-inset-left, 0px));
+  }
+  .sheet-card {
+    display: grid;
+    gap: 12px;
+    width: min(420px, 100%);
+    max-height: 100%;
+    overflow: auto;
+    padding: 18px;
+    border-radius: 20px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    -webkit-user-select: auto;
+    user-select: auto;
+  }
+  .sheet-card h2 { margin: 0; font-size: 17px; text-wrap: balance; }
+  .sheet-card p { margin: 0; color: var(--ink-2); line-height: 1.5; }
+  .sheet-card img { border-radius: 12px; width: 100%; -webkit-touch-callout: default; }
+  .sheet-card .save { justify-self: stretch; height: 42px; border-radius: 21px; margin: 0; }
+  .sheet-card textarea {
+    width: 100%;
+    min-height: 92px;
+    resize: vertical;
+    padding: 12px 14px;
+    border: 0;
+    border-radius: 14px;
+    background: var(--surface-2);
+    color: var(--ink);
+    font: 600 17px/1.35 var(--font-ui);
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  .sheet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .sheet-actions .ghost { height: 42px; border: 0; border-radius: 21px; background: var(--surface-2); font-weight: 650; }
+  .it .font { font-size: 19px; line-height: 1; color: var(--ink); }
+
+  @media (min-width: 760px) {
+    .row, .tabs { -webkit-mask-image: none; mask-image: none; }
+    .panel > * { width: min(100%, 860px); justify-self: center; }
+  }
+  @media (max-height: 620px) {
+    :root { --row-h: 80px; --bar-h: 44px; }
+    .it { height: 76px; gap: 4px; }
+    .it .ic { width: 40px; height: 40px; }
+    .it.th .ic { width: 52px; height: 66px; }
+    .it.th { width: 56px; }
+    .it.th .lb { left: 1px; right: 1px; font-size: 9.5px; letter-spacing: -0.01em; }
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes blink { 50% { opacity: 0.3; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+  @keyframes drop { from { opacity: 0; transform: translate(-50%, -6px); } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app" data-view="main">
+  <header class="topbar">
+    <label class="open" id="open" for="file" role="button" tabindex="0" aria-label="Open a photo" title="Open a photo">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="14" height="14" rx="3"/><path d="M3 16l4-4 4 4 2-2 4 4"/><path d="M19.5 2.5v6M16.5 5.5h6"/></svg><span class="label">Open</span>
+    </label>
+    <input type="file" id="file" accept="image/*" class="sr-only" tabindex="-1" aria-hidden="true">
+    <input type="file" id="bg-file" accept="image/*" class="sr-only" tabindex="-1" aria-hidden="true">
+    <input type="file" id="person-file" accept="image/*" class="sr-only" tabindex="-1" aria-hidden="true">
+    <input type="color" id="tone-color" value="#c69072" class="sr-only" tabindex="-1" aria-hidden="true">
+    <h1 class="mark">Lumina</h1>
+    <span class="spacer"></span>
+    <button class="icon-btn" id="undo" type="button" aria-label="Undo" title="Undo" disabled>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5L4 10l5 5"/><path d="M4 10h10a6 6 0 0 1 0 12h-3"/></svg>
+    </button>
+    <button class="icon-btn" id="redo" type="button" aria-label="Redo" title="Redo" disabled>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l5 5-5 5"/><path d="M20 10H10a6 6 0 0 0 0 12h3"/></svg>
+    </button>
+    <button class="save" id="save" type="button">Save</button>
+  </header>
+
+  <main class="stage" id="stage" aria-label="Photo">
+    <canvas id="view" role="img" aria-label="Your photo with edits applied"></canvas>
+    <div class="status glass pill-note" id="status" data-state="loading" hidden><span class="dot"></span><span id="status-text"></span></div>
+    <div class="before glass pill-note" id="before" hidden>Before</div>
+    <div class="light-handle" id="light-handle" hidden></div>
+    <div class="crop-box" id="crop-box" hidden><i></i><i></i><i></i><i></i></div>
+    <div class="band-fill" id="band-fill" hidden></div>
+    <div class="band-line" id="band-a" hidden></div>
+    <div class="band-line" id="band-b" hidden></div>
+    <div class="marker" id="marker" hidden></div>
+    <div class="sel-box" id="sel-box" hidden></div>
+    <div class="tune-dots" id="tune-dots" hidden></div>
+    <div class="float" id="float">
+      <p class="note glass pill-note" id="note" hidden></p>
+      <div class="chips glass" id="chips" role="group" hidden></div>
+      <div class="slider glass" id="slider" hidden>
+        <label for="slider-input" id="slider-label">Strength</label>
+        <input type="range" id="slider-input" min="0" max="100" value="0">
+        <output for="slider-input" id="slider-value">0</output>
+      </div>
+    </div>
+    <div class="side">
+      <button class="round glass" id="compare-tool" type="button" aria-pressed="false" hidden></button>
+      <button class="round glass" id="compare" type="button" aria-pressed="false" aria-label="Hold to see the original photo" title="Hold: before all edits">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M12 2v20"/><path d="M12 4h6a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-6z" fill="currentColor" stroke="none"/></svg>
+      </button>
+    </div>
+    <button class="round glass fit" id="fit" type="button" aria-label="Fit photo to screen" title="Fit to screen" hidden>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4"/></svg>
+    </button>
+    <div class="brush-cursor" id="cursor" hidden></div>
+    <div class="toast glass pill-note" id="toast" role="status" aria-live="polite" hidden></div>
+    <div class="busy" id="busy" hidden><div class="glass pill-note"><span class="spinner"></span><span id="busy-text">Working…</span></div></div>
+    <div class="fatal" id="fatal" hidden><p><strong>This browser can’t run the editor</strong>Lumina needs WebGL 2, which current Safari, Chrome, Edge and Firefox all support. Update your browser or try another one.</p></div>
+  </main>
+
+  <section class="panel" id="panel" aria-label="Editing tools">
+    <div class="row" id="row" role="toolbar" aria-label="Tools"></div>
+    <div class="bar" id="bar">
+      <button class="bar-btn" id="cancel" type="button" aria-label="Discard changes" title="Discard changes" hidden>
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="tabs" id="tabs" role="tablist" aria-label="Sections"></div>
+      <h2 class="bar-title" id="bar-title" hidden></h2>
+      <button class="bar-btn" id="done" type="button" aria-label="Done" title="Done" hidden>
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12.5l4.8 4.8L19.5 7"/></svg>
+      </button>
+    </div>
+  </section>
+</div>
+
+<div class="sheet" id="save-sheet" role="dialog" aria-modal="true" aria-labelledby="save-sheet-title" hidden>
+  <div class="sheet-card">
+    <h2 id="save-sheet-title">Press and hold to save</h2>
+    <p>This viewer can’t save files directly. Press and hold the photo, then choose Save to Photos or Save Image.</p>
+    <img id="save-img" alt="Your edited photo">
+    <button class="save" id="save-sheet-close" type="button">Done</button>
+  </div>
+</div>
+
+<div class="sheet" id="text-sheet" role="dialog" aria-modal="true" aria-labelledby="text-sheet-title" hidden>
+  <div class="sheet-card">
+    <h2 id="text-sheet-title">Text</h2>
+    <textarea id="text-input" rows="3" maxlength="200" placeholder="Type something" aria-label="Text"></textarea>
+    <div class="sheet-actions">
+      <button class="ghost" id="text-cancel" type="button">Cancel</button>
+      <button class="save" id="text-done" type="button">Done</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
