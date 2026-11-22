@@ -1,7 +1,7 @@
 # Daniel Collison: personal site
 
-The source of my personal site. It shows four projects, each demonstrated with its own data rather
-than screenshots:
+The source of [danielcollison.dev](https://danielcollison.dev), my personal site. It shows four projects,
+each demonstrated with its own data rather than screenshots:
 
 - **Tape Reader:** the OCR band reading one real day of a livestream's alert feed under the pipeline's
   own filter rules, and a calendar of every day the pipeline read.
@@ -10,7 +10,8 @@ than screenshots:
   runs in the visitor's browser.
 - **Parity:** the live bot's recorded event log for one session, replayed as mission control, and the
   incident that changed how it settles exits.
-- **Lumina:** the face analysis behind the makeup app, and the app itself, running live at `/lumina/`.
+- **Lumina:** the face analysis behind the makeup app, and the app itself, running live at
+  [danielcollison.dev/lumina](https://danielcollison.dev/lumina/).
 
 ## How it's built
 

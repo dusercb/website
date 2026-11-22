@@ -41,12 +41,12 @@ def main() -> int:
         return 0
     for name in FILES:
         path = os.path.join(SITE, name)
-        text = open(path, encoding="utf-8").read()
+        text = open(path, encoding="utf-8", newline="").read()  # keep line endings as they are
         before = text
         for key, new in changes.items():
             text = text.replace(current[key], new)
         if text != before:
-            open(path, "w", encoding="utf-8").write(text)
+            open(path, "w", encoding="utf-8", newline="").write(text)
             print(f"updated {name}")
     current.update(changes)
     json.dump(current, open(STATE, "w", encoding="utf-8"), indent=2)
