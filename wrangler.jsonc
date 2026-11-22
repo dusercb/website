@@ -1,5 +1,5 @@
-// Cloudflare Workers deployment: the site is the static files in site/, with no Worker code.
-// Custom domains are managed in the Cloudflare dashboard.
+// Cloudflare Workers deployment: the site is the static files in site/, with no Worker code,
+// served on danielcollison.dev and www.danielcollison.dev.
 {
   "name": "website",
   "compatibility_date": "2026-10-01",
@@ -7,6 +7,10 @@
     "directory": "./site",
     "not_found_handling": "404-page"
   },
-  "workers_dev": true,
+  "routes": [
+    { "pattern": "danielcollison.dev", "custom_domain": true },
+    { "pattern": "www.danielcollison.dev", "custom_domain": true }
+  ],
+  "workers_dev": false,
   "preview_urls": false
 }
