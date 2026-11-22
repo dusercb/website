@@ -585,7 +585,7 @@ em { font-style: italic; }
   transition: color 0.2s, padding 0.35s var(--ease);
 }
 .contact__links em { font: 400 13px/1 var(--f-mono); font-style: normal; color: var(--ink-3); letter-spacing: 0; }
-.contact__links svg { margin-left: auto; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.contact__links svg { flex-shrink: 0; margin-left: auto; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
 .contact__links a:hover, .contact__links button:hover { color: var(--hot); padding-left: 12px; }
 .foot { border-top: 1px solid var(--line); padding-block: 40px 56px; }
 .foot__inner { display: grid; gap: 10px; }
@@ -653,7 +653,8 @@ em { font-style: italic; }
   .loop__rec { grid-column: 2; grid-row: 3; }
   .loop__diff { grid-column: 1; grid-row: 3; justify-self: stretch; }
   .classes { grid-template-columns: 1fr; }
-  .incident { grid-template-columns: 1fr; }
+  /* minmax(0, ...) lets the column shrink below the code excerpt's longest line; the excerpt scrolls instead. */
+  .incident { grid-template-columns: minmax(0, 1fr); }
   .incident__fix { margin-top: 12px; }
   .passes { grid-template-columns: 1fr 1fr; gap: 26px 0; }
   .passes li:nth-child(2)::after { display: none; }
@@ -677,6 +678,8 @@ em { font-style: italic; }
   .num:nth-child(3) { border-right: 1px solid var(--line); }
   .num:nth-child(2n) { border-right: 0; }
   .phead { grid-template-columns: 1fr; }
+  /* Sized so the longest single word, HINDSIGHT, fits a 320px-wide screen. */
+  .phead__title:not(.phead__title--lumina) { font-size: min(56px, 13.5vw); }
   .phead__index { margin: 0; }
   .phead__meta { grid-column: 1; }
   .honest { grid-template-columns: 1fr; }
@@ -692,6 +695,14 @@ em { font-style: italic; }
   .passes { grid-template-columns: 1fr; }
   .passes li::after { display: none; }
   .controls .btn--sm { width: 100%; justify-content: center; }
+}
+@media (max-width: 400px) {
+  /* The email row needs about 345px: below that, "Email" and the copy icon share the first line and the address takes the second. */
+  .contact__links button { flex-wrap: wrap; row-gap: 10px; }
+  .contact__links em { order: 1; flex-basis: 100%; }
+  /* Their longest words ("positions.", "something") fit a 320px-wide screen. */
+  .intro__title { font-size: min(48px, 13.4vw); }
+  .contact__title { font-size: min(46px, 12.5vw); }
 }
 
 @media (prefers-reduced-motion: reduce) {

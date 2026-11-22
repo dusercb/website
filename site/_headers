@@ -2,13 +2,15 @@
 # so each header below is set by only one rule for any given path.
 /assets/fonts/*
   Cache-Control: public, max-age=31536000, immutable
+# The site has no build step, so its CSS, JavaScript and data keep fixed names: browsers
+# revalidate them on every visit (a quick 304 when unchanged) so changes show up at once.
 /assets/css/*
-  Cache-Control: public, max-age=3600
+  Cache-Control: no-cache
 /assets/js/*
-  Cache-Control: public, max-age=3600
-/assets/img/*
-  Cache-Control: public, max-age=3600
+  Cache-Control: no-cache
 /data/*
+  Cache-Control: no-cache
+/assets/img/*
   Cache-Control: public, max-age=3600
 /lumina/vendor/*
   Cache-Control: public, max-age=2592000
