@@ -177,15 +177,43 @@ function faceDemo(root, d) {
 
 function phone(root) {
   const btn = $('#phoneLaunch', root);
+  const box = $('#phone', root);
   const screen = $('.phone__screen', root);
+  const small = () => matchMedia('(max-width: 700px)').matches;
+  let frame = null;
+  let bar = null;
+  // An animated ancestor would trap position: fixed, so the open layer moves to <body> and back.
+  const spot = document.createComment('phone');
+  // On phones the app opens as a full-screen layer over the page, with a way back.
+  const close = () => {
+    box.classList.remove('is-live');
+    if (spot.parentNode) spot.replaceWith(box);
+    document.documentElement.classList.remove('phone-open');
+    btn.textContent = 'Back to the app';
+    btn.focus({ preventScroll: true });
+  };
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && box.classList.contains('is-live')) close(); });
   btn.addEventListener('click', () => {
-    if (matchMedia('(max-width: 700px)').matches) { window.open('lumina/', '_blank', 'noopener'); return; }
-    const f = document.createElement('iframe');
-    f.src = 'lumina/';
-    f.title = 'Lumina, running live';
-    f.allow = 'clipboard-write; web-share';
-    screen.append(f);
-    f.addEventListener('load', () => $('#phonePoster', root).remove(), { once: true });
+    if (small()) {
+      if (!bar) {
+        bar = document.createElement('div');
+        bar.className = 'phone__bar';
+        bar.innerHTML = '<button type="button" class="phone__close">← Back to the page</button><a href="lumina/" target="_blank" rel="noopener">Open full screen ↗</a>';
+        $('.phone__close', bar).addEventListener('click', close);
+        box.prepend(bar);
+      }
+      if (!spot.parentNode) { box.replaceWith(spot); document.body.append(box); }
+      box.classList.add('is-live');
+      document.documentElement.classList.add('phone-open');
+    }
+    if (frame) return;
+    frame = document.createElement('iframe');
+    frame.src = 'lumina/';
+    frame.title = 'Lumina, running live';
+    frame.allow = 'clipboard-write; web-share';
+    screen.append(frame);
+    // Keep the poster (and its button) on phones: it is how you return to the app after closing.
+    frame.addEventListener('load', () => { if (!small()) $('#phonePoster', root)?.remove(); else btn.textContent = 'Back to the app'; }, { once: true });
     btn.textContent = 'Starting…';
   });
 }
