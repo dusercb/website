@@ -555,16 +555,6 @@ em { font-style: italic; }
 .phone__poster { position: absolute; inset: 44px 0 0; display: grid; place-items: end center; padding-bottom: 46px; }
 .phone__poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
 .phone__poster::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(23, 19, 26, 0.55)); }
-.phone__bar { display: none; }
-/* Phones: the launched app becomes a full-screen layer with a bar to get back. */
-.phone.is-live { position: fixed; inset: 0; z-index: 1000; width: 100%; height: 100%; max-width: none; aspect-ratio: auto; padding: 0; border-radius: 0; box-shadow: none; display: flex; flex-direction: column; background: #15121a; }
-.phone.is-live::before { display: none; }
-.phone.is-live .phone__bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: max(10px, env(safe-area-inset-top)) 16px 10px; font: 500 13px/1 var(--f-mono); }
-.phone__bar button, .phone__bar a { padding: 8px 0; border: 0; background: none; color: #fff; font: inherit; text-decoration: none; cursor: pointer; }
-.phone.is-live .phone__screen { flex: 1; height: auto; border-radius: 0; padding-top: 0; }
-.phone.is-live .phone__screen::before, .phone.is-live .phone__screen::after { display: none; }
-.phone.is-live .phone__screen iframe { position: absolute; inset: 0; z-index: 2; }
-html.phone-open, html.phone-open body { overflow: hidden; }
 .btn--studio { position: relative; z-index: 2; background: #fff; color: #17131a; border-color: #fff; box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.5); }
 .btn--studio svg { fill: currentColor; stroke: none; }
 .btn--studio:hover { background: #ffe4ee; border-color: #ffe4ee; }
