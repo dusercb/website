@@ -159,8 +159,8 @@ em { font-style: italic; }
 .nav__links a:hover { color: var(--ink); }
 .nav__links a.is-active { color: var(--ink); background: rgba(235, 231, 220, 0.06); }
 .nav__links a.is-active b { color: var(--hot); }
-.nav__clock { display: flex; gap: 6px; align-items: baseline; font: 500 13px/1 var(--f-mono); font-variant-numeric: tabular-nums; color: var(--ink); min-width: 92px; }
-.nav__et { font-size: 10px; color: var(--hot); letter-spacing: 0.08em; }
+.nav__pct { display: flex; justify-content: flex-end; align-items: baseline; gap: 1px; min-width: 5ch; font: 500 13px/1 var(--f-mono); font-variant-numeric: tabular-nums; color: var(--ink); }
+.nav__pct i { font-style: normal; font-size: 11px; color: var(--hot); }
 .nav__about { display: none; }
 .nav__cmd { display: inline-flex; gap: 3px; padding: 6px; border: 0; background: none; cursor: pointer; }
 .nav__progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; }
@@ -590,8 +590,7 @@ em { font-style: italic; }
 .contact__links a:hover, .contact__links button:hover { color: var(--hot); padding-left: 12px; }
 .foot { border-top: 1px solid var(--line); padding-block: 40px 56px; }
 .foot__inner { display: grid; gap: 10px; }
-.foot__bell { margin: 0 0 8px; font: 700 clamp(20px, 2vw, 28px)/1.2 var(--f-display); font-stretch: 108%; }
-.foot__bell span { color: var(--hot); font-family: var(--f-mono); font-weight: 600; font-variant-numeric: tabular-nums; }
+.foot__thanks { margin: 0 0 8px; font: 700 clamp(20px, 2vw, 28px)/1.2 var(--f-display); font-stretch: 108%; }
 .foot__small { margin: 0; font-size: 13px; color: var(--ink-3); }
 
 /* ------------------------------------------------------------------ command palette + toast */
@@ -631,10 +630,10 @@ em { font-style: italic; }
 }
 @media (max-width: 900px) {
   .nav__links { display: none; }
-  .nav__clock { margin-left: auto; }
+  .nav__pct { margin-left: auto; }
   /* The section links are hidden on small screens; the About link stays. */
   .nav__about { display: inline-flex; margin-left: auto; padding: 8px 4px; font: 500 13.5px/1 var(--f-sans); color: var(--ink-2); text-decoration: none; }
-  .nav__about + .nav__clock { margin-left: 0; }
+  .nav__about + .nav__pct { margin-left: 0; }
   .pipe { grid-template-columns: 1fr; justify-items: start; gap: 6px; }
   .pipe__io { text-align: left; padding-left: 4px; }
   .pipe__io br { display: none; }

@@ -1,20 +1,19 @@
-// Boot: navigation, the scroll-driven session clock, the hero's OCR read of the
+// Boot: navigation, the scroll progress readout, the hero's OCR read of the
 // name, counters, heading decodes, lazy section modules, the pipeline flow, the
 // relight transition into Lumina, and the command palette.
-import { $, $$, clamp, clock, decode, easeInOut, fetchJSON, fitCanvas, fmt, loop, odometer, onResize, reducedMotion, toast, watch } from './util.js';
+import { $, $$, clamp, decode, easeInOut, fetchJSON, fitCanvas, fmt, loop, odometer, onResize, reducedMotion, toast, watch } from './util.js';
 
 const root = document.documentElement;
 try { if (localStorage.getItem('motion') === 'off') root.classList.add('motion-off'); } catch { /* storage blocked */ }
 
-/* ------------------------------------------------------------------ nav, progress and the session clock */
+/* ------------------------------------------------------------------ nav and scroll progress */
 const nav = $('#nav');
-const navClock = $('#navClock');
+const navPct = $('#navPct');
 const progress = $('#navProgress');
 const relight = $('#relight');
 const relightLight = $('.relight__light');
 const relightStage = $('.relight__stage');
 const lumina = $('#lumina');
-const OPEN = 4 * 3600, BELL = 9.5 * 3600;
 
 let scrollQueued = false;
 function onScroll() {
@@ -25,7 +24,7 @@ function onScroll() {
     const max = document.documentElement.scrollHeight - innerHeight;
     const p = max > 0 ? clamp(scrollY / max, 0, 1) : 0;
     progress.style.transform = `scaleX(${p})`;
-    navClock.textContent = clock(OPEN + p * (BELL - OPEN));
+    navPct.textContent = Math.round(p * 100);
     nav.classList.toggle('is-solid', scrollY > 40);
 
     // relight: a soft studio light grows from the centre while the stage is pinned
