@@ -179,7 +179,6 @@ function phone(root) {
   const btn = $('#phoneLaunch', root);
   const screen = $('.phone__screen', root);
   btn.addEventListener('click', () => {
-    if (matchMedia('(max-width: 700px)').matches) { window.open('lumina/', '_blank', 'noopener'); return; }
     const f = document.createElement('iframe');
     f.src = 'lumina/';
     f.title = 'Lumina, running live';
