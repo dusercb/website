@@ -73,29 +73,29 @@
       <article class="card skill reveal">
         <p class="skill__n">01</p>
         <h3>Data and databases</h3>
-        <p>Relational database design, writing and tuning SQL, and validating and cleaning data. I've spent a lot of time checking records and tracking down data that's wrong or missing, and my own pipelines are built to handle bad or missing data rather than fall over.</p>
+        <p>Modelling data as tables with clear keys, writing SQL with joins and aggregates, and adding indexes where queries need them. My backtester stores every result in a SQLite table indexed by ticker and date. I check data before trusting it, whether it comes from an API or a business database: missing values, duplicates and the wrong types.</p>
         <ul class="tags"><li>SQL</li><li>Relational design</li><li>SQLite</li><li>pandas</li><li>NumPy</li></ul>
       </article>
       <article class="card skill reveal" style="--d: 1">
         <p class="skill__n">02</p>
         <h3>Back end</h3>
-        <p>Python and Java services, REST APIs and event-driven processing, built on object-oriented design and a grounding in data structures and algorithms. My trading bot is event-driven: it reacts to live market data as it arrives and acts on it with nobody at the keyboard.</p>
+        <p>Object-oriented design in Python and Java, REST APIs and JSON, explicit error handling, and choosing data structures by what they cost (Big&nbsp;O). My trading bot is event-driven on asyncio, with orders, risk checks, broker calls and recording each in their own module, covered by tests.</p>
         <ul class="tags"><li>Python</li><li>Java</li><li>REST APIs</li><li>asyncio</li><li>Object-oriented design</li></ul>
       </article>
       <article class="card skill reveal">
         <p class="skill__n">03</p>
         <h3>Front end</h3>
-        <p>JavaScript, HTML and CSS, written by hand and kept accessible: usable from the keyboard, described for screen readers and calm for anyone who prefers less motion. When the browser has heavy lifting to do, WebGL2 and GLSL. This site and Lumina use no framework and no build step.</p>
+        <p>Semantic HTML, CSS layout with grid and flexbox, and plain JavaScript: the DOM, events, modules and fetching data. I build pages that work from a 320px phone upwards, from the keyboard and with a screen reader. This site loads each section's code only when it's needed, and Lumina uses WebGL2 and GLSL for its image work.</p>
         <ul class="tags"><li>JavaScript</li><li>HTML</li><li>CSS</li><li>WebGL2 / GLSL</li><li>Accessibility</li></ul>
       </article>
       <article class="card skill reveal" style="--d: 1">
         <p class="skill__n">04</p>
         <h3>Running it for real</h3>
-        <p>Linux (Ubuntu and Debian) over SSH, VPS deployment, systemd and cron, Bash, and monitoring through logs, plus some Docker. My trading bot runs unattended around the clock on a remote server in New York, close to the broker, and when something goes wrong I diagnose and fix it remotely.</p>
+        <p>Working on remote servers from the command line: SSH, Bash, deploying code, scheduling jobs, keeping processes running, and reading the logs first when something goes wrong. My trading bot runs unattended on a server in New York. It saves its open positions, so after a crash or restart it reconciles with the broker and carries on, and one command stops it safely.</p>
         <ul class="tags"><li>Linux</li><li>SSH</li><li>systemd</li><li>cron</li><li>Bash</li><li>Docker (familiar)</li></ul>
       </article>
     </div>
-    <p class="also reveal"><b>Also:</b> C++ and C, Git and GitHub, automated testing with pytest, continuous integration with GitHub Actions, Agile ways of working, and plenty of IT troubleshooting.</p>
+    <p class="also reveal"><b>Also:</b> C and C++, Git and GitHub, testing with pytest and GitHub Actions, Agile ways of working, and IT troubleshooting.</p>
   </div>
 </section>
 
