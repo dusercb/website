@@ -1,7 +1,8 @@
 # Daniel Collison: personal site
 
-The source of [danielcollison.dev](https://danielcollison.dev), my personal site. It shows four projects,
-each demonstrated with its own data rather than screenshots:
+The source of [danielcollison.dev](https://danielcollison.dev), my personal site. The home page introduces me:
+what I'm good at, how I work and my background. The [work page](https://danielcollison.dev/work/) shows four
+projects, each demonstrated with its own data rather than screenshots:
 
 - **Tape Reader:** the OCR band reading one real day of a livestream's alert feed under the pipeline's
   own filter rules, and a calendar of every day the pipeline read.
@@ -17,7 +18,7 @@ each demonstrated with its own data rather than screenshots:
 
 Plain HTML, CSS and JavaScript: no framework, no build step, no tracking.
 
-- **The hero** is a hand-written WebGL renderer. Forty-six stocks from one recorded premarket session
+- **The work page's hero** is a hand-written WebGL renderer. Forty-six stocks from one recorded premarket session
   are drawn as ridgelines, with line widths computed in screen space, trading volume as height and new
   highs of day in orange. Hovering picks the front-most ridge under the cursor.
 - **Every other figure** is drawn on canvas from JSON in `site/data/`, which `tools/build_data.py`
@@ -37,9 +38,9 @@ node tools/serve.mjs     # http://localhost:8080
 
 ```
 site/
-  index.html          content and structure
-  about/              the About page: skills, ways of working, background
-  assets/css/         site.css (the Lumina section re-themes itself) and about.css
+  index.html          the home page: about me, skills, how I work, background
+  work/index.html     the work page: the four projects, demonstrated
+  assets/css/         about.css for the home page; site.css for the work page (its Lumina section re-themes itself)
   assets/js/          main.js, hero.js (WebGL), tape.js, hindsight.js, parity.js, lumina.js, util.js
   assets/fonts/       self-hosted fonts
   data/               the JSON every figure is drawn from

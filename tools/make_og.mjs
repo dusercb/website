@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 const out = fileURLToPath(new URL('../site/og.png', import.meta.url));
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
-await page.goto(process.env.URL || 'http://localhost:8080/', { waitUntil: 'networkidle' });
+await page.goto(process.env.URL || 'http://localhost:8080/work/', { waitUntil: 'networkidle' });
 await page.addStyleTag({
   content: `
     .nav, .hero__scroll, .hero__cta, .grain, .hero__caption p, .hero__caption .hint { display: none !important; }

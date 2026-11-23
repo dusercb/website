@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Work · Daniel Collison</title>
+<meta name="description" content="Software developer. A computer-vision pipeline, a tick-accurate backtester, a live trading bot held to decision parity, and an on-device makeup and retouching app, each shown with its own real data.">
+<meta name="theme-color" content="#07080a">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://danielcollison.dev/work/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://danielcollison.dev/work/">
+<meta property="og:title" content="Work · Daniel Collison">
+<meta property="og:description" content="Systems that have to be right: from pixels to positions, and a portrait studio that runs on your phone's GPU.">
+<meta property="og:image" content="https://danielcollison.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/anybody-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/instrument-sans-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/jetbrains-mono-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/css/site.css?v=2">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Daniel Collison","jobTitle":"Software Developer","url":"https://danielcollison.dev/","sameAs":["https://www.linkedin.com/in/daniel-collison-0a0483451/","https://github.com/dusercb"]}
+</script>
+</head>
+<body>
+<a class="skip" href="#work">Skip to the work</a>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="nav__mark" href="#top" aria-label="Back to top"><span>DC</span><i></i></a>
+  <nav class="nav__links" aria-label="Sections">
+    <a href="#tape" data-nav="tape"><b>01</b>Tape Reader</a>
+    <a href="#hindsight" data-nav="hindsight"><b>02</b>Hindsight</a>
+    <a href="#parity" data-nav="parity"><b>03</b>Parity</a>
+    <a href="#lumina" data-nav="lumina"><b>04</b>Lumina</a>
+    <a href="/">About</a>
+    <a href="#contact" data-nav="contact">Contact</a>
+  </nav>
+  <a class="nav__about" href="/">About</a>
+  <div class="nav__clock" title="Scroll position, as a premarket session"><span class="nav__et">ET</span><span id="navClock">04:00:00</span></div>
+  <button class="nav__cmd" type="button" data-open-palette aria-label="Open the command palette"><kbd>Ctrl</kbd><kbd>K</kbd></button>
+  <div class="nav__progress" aria-hidden="true"><i id="navProgress"></i></div>
+</header>
+
+<main>
+<!-- ============================================================ HERO -->
+<section class="hero" id="top" aria-label="Introduction">
+  <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="hero__inner wrap">
+    <p class="kicker hero__kicker"><span class="dot"></span>Software developer · systems · graphics · markets</p>
+    <h1 class="hero__name" id="heroName" aria-label="Daniel Collison"><span class="line">Daniel</span><span class="line">Collison</span></h1>
+    <p class="hero__lede">I build software that has to be right: trading systems that <em>prove</em> their own decisions, and image pipelines that run on the GPU in your hand.</p>
+    <div class="hero__cta">
+      <a class="btn btn--hot" href="#work">See the work <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v11M3.5 8.5 8 13l4.5-4.5"/></svg></a>
+      <a class="btn" href="/lumina/" target="_blank" rel="noopener">Try Lumina live <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3h8v8M13 3 3 13"/></svg></a>
+    </div>
+  </div>
+  <aside class="hero__caption" aria-label="About the background image">
+    <div class="fig">FIG. 0 <span>Live data</span></div>
+    <p>Behind this text: <strong>46 stocks my trading bot watched</strong> on the morning of 14 Aug 2026. Each ridge is one stock's trading volume, minute by minute, from its recorded 10-second bars. <span class="hot">Orange</span> marks every new high of day, the event the bot trades. <span class="hint">Hover a ridge.</span></p>
+    <div class="hero__readout"><span id="heroClock">04:00</span> ET<span class="sep">·</span><span id="heroTip">all 46 symbols</span></div>
+  </aside>
+  <a class="hero__scroll" href="#numbers" aria-label="Scroll down"><span>Scroll</span><i></i></a>
+</section>
+
+<!-- ============================================================ NUMBERS -->
+<section class="numbers wrap" id="numbers" aria-label="By the numbers">
+  <dl class="numbers__grid">
+    <div class="num"><dd data-count="40136">40,136</dd><dt>lines of code across the four projects</dt></div>
+    <div class="num"><dd data-count="514">514</dd><dt>automated tests</dt></div>
+    <div class="num"><dd data-count="1939565">1,939,565</dd><dt>video frames read by OCR</dt></div>
+    <div class="num"><dd data-count="33973">33,973</dd><dt>premarket setups replayed per sweep</dt></div>
+    <div class="num"><dd data-count="35">35</dd><dt>live sessions recorded, event by event</dt></div>
+    <div class="num"><dd data-count="0">0</dd><dt>bytes of your photo uploaded</dt></div>
+  </dl>
+</section>
+
+<!-- ============================================================ PIPELINE INTRO -->
+<section class="intro wrap" id="work" aria-labelledby="introTitle">
+  <p class="kicker">Three systems, one pipeline</p>
+  <h2 class="intro__title" id="introTitle" data-decode>From pixels to positions.</h2>
+  <div class="intro__body">
+    <p>A computer-vision harvester reads four years of livestreamed stock alerts. A tick-accurate backtester replays every one of them with no hindsight at all. A live bot then trades the one strategy that survived, and it has to make exactly the decisions its backtest would, or it doesn't trade.</p>
+  </div>
+  <div class="pipe-wrap">
+  <canvas class="pipe__flow" id="pipeFlow" aria-hidden="true"></canvas>
+  <ol class="pipe" aria-label="The pipeline">
+    <li class="pipe__io">Livestream<br><span>4 years of video</span></li>
+    <li class="pipe__node"><a href="#tape"><b>01</b>Tape Reader</a></li>
+    <li class="pipe__io"><span class="pipe__n" data-count="55085">55,085</span><br><span>ticker-days</span></li>
+    <li class="pipe__node"><a href="#hindsight"><b>02</b>Hindsight</a></li>
+    <li class="pipe__io">signal_core<br><span>shared decision code</span></li>
+    <li class="pipe__node"><a href="#parity"><b>03</b>Parity</a></li>
+    <li class="pipe__io">Orders<br><span>IBKR, premarket</span></li>
+  </ol>
+  </div>
+</section>
+
+<!-- ============================================================ 01 TAPE READER -->
+<section class="project" id="tape" aria-labelledby="tapeTitle" data-module="tape">
+  <div class="wrap">
+    <header class="phead">
+      <p class="phead__index">01</p>
+      <div>
+        <h2 class="phead__title" id="tapeTitle" data-decode>Tape Reader</h2>
+        <p class="phead__sub">Computer vision that read four years of a livestream so I didn't have to.</p>
+      </div>
+      <ul class="phead__meta">
+        <li><span>Built with</span>Python · yt-dlp · ffmpeg · RapidOCR / ONNX Runtime · multiprocessing</li>
+      </ul>
+    </header>
+
+    <div class="split">
+      <div class="split__text prose">
+        <p class="lead">Every trading morning a YouTube stream scrolls an alert feed of the day's premarket movers. Nobody publishes that list. So I built a pipeline that watches the whole archive for me.</p>
+        <p>For each day it finds the feed in the video, reads the stream's on-screen clock to work out the premarket window, downloads just those two and a half hours in parallel chunks, and OCRs a thin band of the feed across a 12-process pool. Every read is checked against the listed-symbol universe and kept only on evidence.</p>
+        <ul class="facts">
+          <li><b>No timezone maths anywhere.</b> Each day's window comes from the clock printed on the stream itself, which handles a start time that drifts from 06:05 to 07:37 ET and a panel that moved 35 pixels between eras.</li>
+          <li><b>It knows where its data ends.</b> An 8-second probe gates each 2.5-hour download. Three consecutive misses mark the archive's layout boundary, which it found on its own: April 2022.</li>
+          <li><b>Precision over recall.</b> Scroll-clipped partials (NOW from NOWL) die to prefix dominance, one-off reads need 0.65 confidence (calibrated on audited crops), and delisted symbols need stronger evidence still.</li>
+          <li><b>Throughput.</b> YouTube throttles each connection to about 1.7× realtime, so each day downloads in parallel chunks. Static frames are dropped before OCR. One day takes about 75 seconds.</li>
+        </ul>
+      </div>
+      <figure class="demo demo--tape">
+        <figcaption class="demo__cap"><span class="fig">FIG. 1.1</span> The OCR band reading the real 4 Aug 2026 feed: names, order, frame counts and confidences all from that day's result file. Accept/reject uses the pipeline's own filter rules.</figcaption>
+        <div class="demo__frame">
+          <canvas id="tapeCanvas" role="img" aria-label="Animated reconstruction of the alert feed being read by OCR, with each read validated and added to the ticker catalogue."></canvas>
+          <div class="demo__hud" aria-hidden="true">
+            <span>frames read <b id="tapeFrames">0</b></span>
+            <span>unique <b id="tapeUnique">0</b></span>
+            <span>rejected <b id="tapeRejected">0</b></span>
+          </div>
+        </div>
+      </figure>
+    </div>
+
+    <figure class="demo demo--wide demo--cal">
+      <figcaption class="demo__cap"><span class="fig">FIG. 1.2</span> Every trading day the pipeline read, coloured by the number of distinct tickers it extracted. <span class="hint">Hover a day.</span></figcaption>
+      <div class="cal" id="tapeCal">
+        <canvas id="calCanvas" role="img" aria-label="Calendar heatmap of 1,073 trading days from April 2022 to August 2026."></canvas>
+        <div class="cal__tip" id="calTip" aria-live="polite"></div>
+      </div>
+      <dl class="stats stats--5">
+        <div><dt>Trading days read</dt><dd data-count="1073">1,073</dd></div>
+        <div><dt>Frames OCR'd</dt><dd data-count="1939565">1,939,565</dd></div>
+        <div><dt>Ticker-days catalogued</dt><dd data-count="55085">55,085</dd></div>
+        <div><dt>Distinct symbols</dt><dd data-count="4542">4,542</dd></div>
+        <div><dt>OCR compute</dt><dd><span data-count="47">47</span> h</dd></div>
+      </dl>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================================================ 02 HINDSIGHT -->
+<section class="project" id="hindsight" aria-labelledby="hindTitle" data-module="hindsight">
+  <div class="wrap">
+    <header class="phead">
+      <p class="phead__index">02</p>
+      <div>
+        <h2 class="phead__title" id="hindTitle" data-decode>Hindsight</h2>
+        <p class="phead__sub">A tick-accurate backtester, engineered to have none.</p>
+      </div>
+      <ul class="phead__meta">
+        <li><span>Built with</span>Python 3.13 · pandas · NumPy · IBKR API · SQLite · pytest · GitHub Actions</li>
+      </ul>
+    </header>
+
+    <div class="split split--flip">
+      <div class="split__text prose">
+        <p class="lead">Most backtests lie in small ways. They fill at prices that never traded, or let a 08:15 decision peek at 08:20's volume. Hindsight is built so it can't.</p>
+        <p>It replays each premarket on IBKR 10-second bars and resolves every candle that crosses a trigger, stop or target from the real trades inside it, then adds order latency. Every entry gate reads only data through the prior completed minute. The result is a backtest you can actually port to live trading, and a live bot that later did.</p>
+        <ul class="facts">
+          <li><b>Tick-resolved fills.</b> The fill is the first real print after the crossing, plus 100&nbsp;ms. Targets fill at the crossing print, because a resting limit doesn't wait. That distinction once turned real wins into phantom break-evens. The microscope below re-derives this trade's fills from the raw ticks, in your browser, and checks them against the backtest.</li>
+          <li><b>Causal by construction.</b> Volume, MACD, EMA and VWAP gates all read the prior completed minute. A volume surge that hasn't happened yet can't qualify a trade.</li>
+          <li><b>A cache that heals itself.</b> 14.5&nbsp;GB of bars and ticks. An empty tick response is never cached as truth: a gap memo retries across runs, then retires windows IBKR will never serve.</li>
+          <li><b>Research-grade output.</b> Interactive HTML reports, per-trade charts, SQLite, Monte Carlo, t-statistics, confidence intervals, and concentration checks: what if the best three trades never happened?</li>
+        </ul>
+      </div>
+      <figure class="demo demo--chart">
+        <figcaption class="demo__cap"><span class="fig">FIG. 2.1</span> One real trade, replayed bar by bar: FLYX, 8 Jan 2026, on IBKR 10-second bars. The strategy's state machine runs alongside.</figcaption>
+        <div class="demo__frame chart" id="tradeChart">
+          <canvas id="tradeCanvas" role="img" aria-label="Candlestick replay of FLYX on 8 January 2026: a rip to a $4.89 high, a first pullback to $4.54, an entry at $4.67, half banked at $4.80 and the rest trailed out at $6.01 for +5.6R."></canvas>
+          <div class="chart__note" id="tradeNote" aria-live="polite"></div>
+        </div>
+        <ol class="states" id="tradeStates" aria-label="Strategy state">
+          <li data-s="0">Watching</li>
+          <li data-s="1">Rip</li>
+          <li data-s="2">Pullback</li>
+          <li data-s="3">Armed</li>
+          <li data-s="4">Filled</li>
+          <li data-s="5">½ banked</li>
+          <li data-s="6">Trailing</li>
+          <li data-s="7">Exited</li>
+        </ol>
+        <div class="controls">
+          <button class="ctl" type="button" id="tradePlay" aria-label="Pause the replay"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-pause" d="M5 3v10M11 3v10"/><path class="i-play" d="M4.5 2.5v11l9-5.5z"/></svg></button>
+          <button class="ctl" type="button" id="tradeRestart" aria-label="Restart the replay"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8a5 5 0 1 0 1.6-3.7M3 2.5v3h3"/></svg></button>
+          <div class="ctl__time" id="tradeClock">08:00:00 ET</div>
+          <button class="btn btn--sm" type="button" id="tickOpen">Inspect the entry candle's 1,401 trades</button>
+        </div>
+      </figure>
+    </div>
+
+    <figure class="demo demo--wide micro" id="micro" hidden>
+      <figcaption class="demo__cap"><span class="fig">FIG. 2.2</span> Tick microscope: the single 10-second candle at 08:16:10. IBKR stamps historical ticks to the second, so trades within a second are spread in sequence order.</figcaption>
+      <div class="micro__body">
+        <canvas id="microCanvas" role="img" aria-label="Every trade inside the 08:16:10 candle, showing the first print at or above the $4.65 trigger, the fill 100 milliseconds later at $4.67, and the $4.80 target print."></canvas>
+        <div class="micro__side">
+          <div class="micro__tabs" role="tablist">
+            <button type="button" role="tab" aria-selected="true" data-w="entry">Entry candle</button>
+            <button type="button" role="tab" aria-selected="false" data-w="exit">Exit candle</button>
+          </div>
+          <dl class="micro__read" id="microRead"></dl>
+          <p class="micro__tip" id="microTip">Hover a trade.</p>
+        </div>
+      </div>
+    </figure>
+
+    <div class="duo">
+      <figure class="demo demo--funnel">
+        <figcaption class="demo__cap"><span class="fig">FIG. 2.3</span> Where 33,973 setups went. Every bucket comes from the run's own results file and sums back to the total.</figcaption>
+        <div class="funnel" id="funnel"></div>
+      </figure>
+      <figure class="demo demo--gates">
+        <figcaption class="demo__cap"><span class="fig">FIG. 2.4</span> 612 times, price touched a trigger. Gates blocked 558 of them, and every one is accounted for.</figcaption>
+        <div class="gates" id="gates"></div>
+        <p class="gates__punch"><b data-count="91">91</b> of those trades only looked valid with hindsight: the volume that qualified them hadn't happened yet as of that bar.</p>
+      </figure>
+    </div>
+
+    <div class="honest">
+      <div class="honest__text prose">
+        <h3 class="h3">Profitable isn't the same as real.</h3>
+        <p>The backtester ran two strategies, and both made money in backtest. Only one held up: the wedge's 95% confidence interval straddles zero (t&nbsp;=&nbsp;0.51) and its live paper results came in below expectation, so it was switched off despite a profitable backtest. The dip's interval clears zero, and its mean stays positive with its five best trades deleted.</p>
+        <p class="small">Backtest research figures in R (multiples of risk per trade), not live returns.</p>
+      </div>
+      <figure class="demo demo--ci">
+        <figcaption class="demo__cap"><span class="fig">FIG. 2.5</span> Mean R per trade with 95% confidence intervals.</figcaption>
+        <canvas id="ciCanvas" role="img" aria-label="Confidence intervals: dip strategy mean 0.53R, 95% CI 0.20 to 0.86; wedge strategy mean 0.10R, 95% CI −0.27 to 0.46."></canvas>
+      </figure>
+      <figure class="demo demo--mc">
+        <figcaption class="demo__cap"><span class="fig">FIG. 2.6</span> <span id="mcCaption">1,000 bootstrap resamples of the 54 real dip trades, computed in your browser just now.</span></figcaption>
+        <canvas id="mcCanvas" role="img" aria-label="Monte Carlo fan chart of cumulative R from bootstrap resampling of the real trades."></canvas>
+        <div class="controls controls--mc">
+          <div class="seg" role="radiogroup" aria-label="Strategy">
+            <button type="button" role="radio" aria-checked="true" data-mc="dip">Dip · 54 trades</button>
+            <button type="button" role="radio" aria-checked="false" data-mc="wedge">Wedge · 135 trades</button>
+          </div>
+          <button class="btn btn--sm" type="button" id="mcRoll">Re-roll</button>
+        </div>
+      </figure>
+    </div>
+
+    <dl class="stats stats--5">
+      <div><dt>Lines of Python</dt><dd data-count="10125">10,125</dd></div>
+      <div><dt>Tests</dt><dd data-count="339">339</dd></div>
+      <div><dt>Backtest sweeps run</dt><dd data-count="283">283</dd></div>
+      <div><dt>Ticker-day bar files cached</dt><dd data-count="30896">30,896</dd></div>
+      <div><dt>Tick windows cached</dt><dd data-count="5765">5,765</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ============================================================ 03 PARITY -->
+<section class="project" id="parity" aria-labelledby="parityTitle" data-module="parity">
+  <div class="wrap">
+    <header class="phead">
+      <p class="phead__index">03</p>
+      <div>
+        <h2 class="phead__title" id="parityTitle" data-decode>Parity</h2>
+        <p class="phead__sub">A live trading bot that must make the same decisions as its backtest, or it refuses to run.</p>
+      </div>
+      <ul class="phead__meta">
+        <li><span>Built with</span>Python 3.13 · ib_async · asyncio · JSONL event sourcing · Windows Server · IB Gateway</li>
+      </ul>
+    </header>
+
+    <div class="split">
+      <div class="split__text prose">
+        <p class="lead">The live bot doesn't re-implement the strategy. It imports the backtester's own decision code, pinned to an exact git SHA that it verifies at startup and stamps into every recording.</p>
+        <p>Every session is recorded as an append-only event log. The recording is replayed through the backtester and diffed decision by decision. A different gate verdict, trigger, stop or share count is a Class-0 divergence, and that's a bug by definition, not a tolerance. It ran first as a read-only observer, recording every decision and placing nothing; order code came after.</p>
+        <ul class="facts">
+          <li><b>Budgeted attention.</b> IBKR allows about 100 market-data lines and only three tick-by-tick streams. A tiered watchlist maps onto those limits exactly: every scanner mover monitored, confirmed movers on 5-second bars, and the three tick slots reserved for open positions and armed setups.</li>
+          <li><b>The bot is the stop.</b> IBKR honours no stop orders premarket, so stops are synthetic: watched on every tick and fired as marketable limits. While a position is open, the process being up <em>is</em> the stop. So it adopts positions back after a crash.</li>
+          <li><b>Refuses rather than guesses.</b> It won't arm on anything but a paper account, won't start on a SHA or strategy mismatch, and a kill file flattens everything on the next loop.</li>
+        </ul>
+      </div>
+      <figure class="demo demo--mission">
+        <figcaption class="demo__cap"><span class="fig">FIG. 3.1</span> Mission control: the real event log of the paper session on 14 Aug 2026, replayed. Account identifiers removed; nothing else is. It was the wedge's last day live: it was switched off the next morning.</figcaption>
+        <div class="demo__frame mission" id="mission">
+          <div class="mission__bar">
+            <span class="mission__tag">SESSION 2026-08-14</span>
+            <span class="mission__tag mission__tag--dim">PAPER</span>
+            <span class="mission__tag mission__tag--dim" id="missionSha">signal_core@bd954e1</span>
+            <span class="mission__clock" id="missionClock">04:00:00</span>
+          </div>
+          <div class="mission__body">
+            <div class="tiers">
+              <div class="tier tier--a"><h4>Tier A <span>tick-by-tick · 3 slots</span></h4><div class="slots" id="tierA"><i></i><i></i><i></i></div></div>
+              <div class="tier tier--b"><h4>Tier B <span>tracked · 5-second bars</span></h4><div class="chips" id="tierB"></div></div>
+              <div class="tier tier--c"><h4>Tier C <span>scanner · snapshot only</span></h4><div class="chips" id="tierC"></div></div>
+            </div>
+            <div class="log" id="missionLog" role="log" aria-label="Event log" aria-live="off"></div>
+          </div>
+          <div class="mission__foot">
+            <span>seen <b id="mSeen">0</b></span><span>tracked <b id="mTracked">0</b></span><span>tick slots <b id="mSlots">0/3</b></span><span>open <b id="mOpen">0</b></span><span>realized <b id="mPnl">$0.00</b></span>
+          </div>
+        </div>
+        <div class="controls">
+          <button class="ctl" type="button" id="missionPlay" aria-label="Pause the replay"><svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-pause" d="M5 3v10M11 3v10"/><path class="i-play" d="M4.5 2.5v11l9-5.5z"/></svg></button>
+          <div class="scrub" id="missionScrub" role="slider" tabindex="0" aria-label="Session time" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i class="scrub__fill"></i><div class="scrub__marks" id="missionMarks"></div></div>
+          <div class="seg seg--speed" role="radiogroup" aria-label="Replay speed">
+            <button type="button" role="radio" aria-checked="false" data-speed="60">60×</button>
+            <button type="button" role="radio" aria-checked="true" data-speed="240">240×</button>
+            <button type="button" role="radio" aria-checked="false" data-speed="900">900×</button>
+          </div>
+          <button class="btn btn--sm" type="button" id="missionJump">Jump to the incident</button>
+        </div>
+      </figure>
+    </div>
+
+    <div class="loop" aria-labelledby="loopTitle">
+      <h3 class="h3" id="loopTitle">The parity loop</h3>
+      <div class="loop__diagram" id="loopDiagram">
+        <div class="loop__node loop__core"><b>signal_core</b><span>the backtester's own decision code<br>pinned by git SHA · stamped @ bd954e1 in the recording</span></div>
+        <div class="loop__node loop__bt"><b>Hindsight</b><span>backtest engine</span></div>
+        <div class="loop__node loop__bot"><b>Parity</b><span>live bot</span></div>
+        <div class="loop__node loop__rec"><b>session_2026-08-14.jsonl</b><span>every bar, gate, decision and order</span></div>
+        <div class="loop__node loop__diff"><b>Replay + diff</b><span>same SHA, same recorded feed</span></div>
+        <svg class="loop__wires" id="loopWires" aria-hidden="true"></svg>
+      </div>
+      <ol class="classes">
+        <li><b>Class 0</b><span>Decisions: qualification, arming, triggers, every gate, stops, share counts.</span><em>Must be zero. Blocks the roadmap.</em></li>
+        <li><b>Class 1</b><span>Fills and latency: real vs simulated prices, signal-to-fill time.</span><em>Measured. It <i>is</i> the slippage calibration.</em></li>
+        <li><b>Class 2</b><span>Environment: scanner universe, feed gaps, halts.</span><em>Logged and trended, never failed.</em></li>
+      </ol>
+    </div>
+
+    <article class="incident" aria-labelledby="incTitle">
+      <header class="incident__head">
+        <span class="incident__tag">Incident · 14 Aug 2026 · paper · resolved</span>
+        <h3 class="incident__title" id="incTitle">The 88-second phantom</h3>
+        <p>The bot booked a winning exit that the broker hadn't filled yet.</p>
+      </header>
+      <ol class="timeline">
+        <li><time>06:40:39.079</time><span>Trigger fires on WETO. Long entry submitted.</span></li>
+        <li><time>06:40:40.706</time><span>Filled: 242 shares at 8.7731. Stop 8.34, target 9.45 resting.</span></li>
+        <li class="bad"><time>06:41:44.143</time><span>A print at 9.47 crosses the target. The bot books +$168.66 and <b>drops the position from its book.</b></span></li>
+        <li class="bad"><time>06:41:45.614</time><span><code>reconcile_alarm</code>: "broker holds 242 WETO with NO position in the book". Thirteen times.</span></li>
+        <li><time>06:43:12</time><span>The resting target finally fills. For 88 seconds a live position sat outside the book: no synthetic stop, no crash adoption, and a resting order nobody would have cancelled.</span></li>
+      </ol>
+      <div class="incident__fix">
+        <h4>The fix: decide on the touch, settle on the broker.</h4>
+        <p>The exit <em>decision</em> still happens on the first touch, so parity with the backtest is unchanged. Only the bookkeeping now waits for the broker's fill. Fill quantities are read, never assumed, and every session ends with an audit of IBKR's own execution records against the bot's ledger.</p>
+<pre class="code" aria-label="Excerpt from order_manager.py"><code><span class="k">def</span> <span class="f">_arm_target_confirm</span>(self, pos: Position, price: float) -&gt; <span class="k">None</span>:
+    <span class="s">"""The price touched the target. Record the decision -- but do NOT book
+    the exit, because the resting limit is a real order at the exchange and
+    only IT can say whether we are flat."""</span>
+    self._confirming[pos.key()] = (price, systime.monotonic())
+    self.rec.event(<span class="s">"target_touched"</span>, ticker=pos.ticker, touch=price,
+                   target=pos.target_price, shares=pos.remaining)</code></pre>
+        <p class="small">From <code>live_bot/order_manager.py</code>.</p>
+      </div>
+    </article>
+
+    <dl class="stats stats--5">
+      <div><dt>Lines of Python</dt><dd data-count="3844">3,844</dd></div>
+      <div><dt>Tests</dt><dd data-count="175">175</dd></div>
+      <div><dt>Sessions recorded</dt><dd data-count="35">35</dd></div>
+      <div><dt>Event log on disk</dt><dd><span data-count="171">171</span> MB</dd></div>
+      <div><dt>To IBKR from the NY VPS</dt><dd>~1–3 ms</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ============================================================ 04 LUMINA -->
+<section class="project project--studio" id="lumina" aria-labelledby="luminaTitle" data-module="lumina">
+  <div class="relight" id="relight" aria-hidden="true">
+    <div class="relight__stage">
+      <div class="relight__light"></div>
+      <p class="relight__word">Lumina</p>
+      <p class="relight__hint">04 · the page relights itself</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <header class="phead">
+      <p class="phead__index">04</p>
+      <div>
+        <h2 class="phead__title phead__title--lumina" id="luminaTitle">Lumina</h2>
+        <p class="phead__sub">A makeup and retouching app that runs entirely on your phone. Your photo never leaves it.</p>
+      </div>
+      <ul class="phead__meta">
+        <li><span>Built with</span>WebGL2 · GLSL · MediaPipe (WebAssembly) · vanilla JavaScript · no framework, no build step</li>
+      </ul>
+    </header>
+
+    <div class="split">
+      <div class="split__text prose">
+        <p class="lead">Makeup, skin, sculpt, hair, relight, background and 85 film filters: 28 tools, built from scratch on WebGL2 and on-device models.</p>
+        <p>Lumina finds a face as 478 landmarks with depth, turns them into soft region masks through the canonical face mesh, and runs every effect as a GPU shader. Nothing is generated and nothing is uploaded. It's feature-matched against the leading commercial beauty apps, and only the tools that would need a server are left out.</p>
+      </div>
+      <figure class="demo demo--face">
+        <figcaption class="demo__cap"><span class="fig">FIG. 4.1</span> What Lumina sees: its real cached landmarks for the sample photo, its canonical mesh, and its own region definitions. <span class="hint">Hover the photo to magnify.</span></figcaption>
+        <div class="face" id="face">
+          <img src="/assets/img/lumina-sample.jpg" alt="Sample portrait: a smiling woman in a pink top (CC0, Joshua McKnight via Wikimedia Commons)." width="999" height="1600" decoding="async" loading="lazy">
+          <canvas id="faceCanvas" aria-hidden="true"></canvas>
+          <canvas class="face__lens" id="faceLens" aria-hidden="true"></canvas>
+          <div class="face__stage" id="faceStage" aria-live="polite"></div>
+        </div>
+        <div class="seg seg--face" role="radiogroup" aria-label="Analysis stage">
+          <button type="button" role="radio" aria-checked="false" data-stage="0">Photo</button>
+          <button type="button" role="radio" aria-checked="true" data-stage="1">478 landmarks</button>
+          <button type="button" role="radio" aria-checked="false" data-stage="2">Face mesh</button>
+          <button type="button" role="radio" aria-checked="false" data-stage="3">Region masks</button>
+        </div>
+      </figure>
+    </div>
+
+    <div class="studio">
+      <div class="phone" id="phone">
+        <div class="phone__screen">
+          <div class="phone__poster" id="phonePoster">
+            <img src="/assets/img/lumina-app.jpg" alt="Lumina's editor, open on the sample photo." loading="lazy" decoding="async">
+            <button class="btn btn--studio" type="button" id="phoneLaunch">Launch the real app <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.5v11l9-5.5z"/></svg></button>
+          </div>
+        </div>
+      </div>
+      <div class="studio__text prose">
+        <h3 class="h3">This is the real app, not a video.</h3>
+        <p>This phone runs Lumina itself, loaded from this site. It opens on the sample with cached face data, so nothing heavy downloads until you open a photo of your own. On a phone, it's better full screen.</p>
+        <p><a class="link" href="/lumina/" target="_blank" rel="noopener">Open Lumina full screen ↗</a></p>
+        <ul class="facts facts--tight">
+          <li><b>Hair, strand by strand.</b> A matting pass estimates each edge pixel's share of hair from where its colour sits between hair and background, so recolouring never leaves a halo.</li>
+          <li><b>Sculpt that never tears.</b> Fifty face controls defined once on the canonical mesh, applied through 468 detected points, and rasterised into an exactly invertible warp grid with a fold guard.</li>
+          <li><b>Background, rebuilt on the phone.</b> To move the subject without dragging the background, it rebuilds what was behind them: a push-pull fill, PatchMatch with Wexler-style voting, then full-resolution detail.</li>
+          <li><b>Light in 3D.</b> Relight builds normals from an inflated silhouette with the face mesh's depth matched in, and lights in linear space so shading stays natural.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tools" aria-labelledby="toolsTitle">
+      <h3 class="h3" id="toolsTitle">28 tools <span class="muted">· hover one</span></h3>
+      <ul class="tools__list" id="toolsList"></ul>
+      <p class="tools__blurb" id="toolsBlurb" aria-live="polite">Every tool reads the same masks and writes into the same four GPU passes.</p>
+    </div>
+
+    <ol class="passes" aria-label="Render passes">
+      <li><b>Retouch pass</b><span>skin, face and body: smoothing, healing, eyes, teeth, matte</span></li>
+      <li><b>Hair pass</b><span>a matte strand by strand, then colour, care and grey on the hair's share of each pixel</span></li>
+      <li><b>Composite pass</b><span>makeup, background, people added from other photos</span></li>
+      <li><b>Final pass</b><span>one warp for sculpt and body, crop and lens, relight, effects, grade, text</span></li>
+    </ol>
+
+    <dl class="stats stats--6">
+      <div><dt>Tools</dt><dd data-count="28">28</dd></div>
+      <div><dt>Sculpt controls</dt><dd data-count="50">50</dd></div>
+      <div><dt>Colour filters</dt><dd data-count="85">85</dd></div>
+      <div><dt>On-device models</dt><dd data-count="4">4</dd></div>
+      <div><dt>Lines of JS + GLSL</dt><dd data-count="13703">13,703</dd></div>
+      <div><dt>Bytes uploaded</dt><dd>0</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ============================================================ CONTACT -->
+<section class="contact" id="contact" aria-labelledby="contactTitle">
+  <div class="wrap">
+    <p class="kicker">Contact</p>
+    <h2 class="contact__title" id="contactTitle" data-decode>Let's talk.</h2>
+    <div class="contact__grid">
+      <div class="prose">
+        <p class="lead">I'm Daniel, a software developer. I enjoy careful, detailed work and seeing a project through, from the first idea to something that runs reliably.</p>
+        <p>The four projects above cover computer vision, quantitative research, real-time systems and GPU graphics. If you think I could help with something you're working on, I'd be glad to hear from you.</p>
+        <p><a class="link" href="/">More about me and how I work →</a></p>
+      </div>
+      <ul class="contact__links">
+        <li><a href="https://www.linkedin.com/in/daniel-collison-0a0483451/" target="_blank" rel="noopener"><span>LinkedIn</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3h8v8M13 3 3 13"/></svg></a></li>
+        <li><a href="https://github.com/dusercb" target="_blank" rel="noopener"><span>GitHub</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3h8v8M13 3 3 13"/></svg></a></li>
+        <li><button type="button" data-copy="daniel.collison.dc@gmail.com"><span>Email</span><em>daniel.collison.dc@gmail.com</em><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="5" y="5" width="8" height="8" rx="1"/><path d="M3 10V3h7"/></svg></button></li>
+      </ul>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <p class="foot__bell"><span id="bellClock">09:30:00</span> ET. That's the opening bell. Thanks for scrolling.</p>
+    <p class="foot__small">No framework, no template, no tracking. Every chart on this page is drawn from the projects' real data. Press <kbd>Ctrl</kbd> <kbd>K</kbd> for the command palette.</p>
+    <p class="foot__small">© 2026 Daniel Collison · Sample portrait CC0 (Joshua McKnight, Wikimedia Commons) · Fonts under the SIL Open Font License.</p>
+  </div>
+</footer>
+
+<div class="palette" id="palette" hidden>
+  <div class="palette__box" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="palette__input"><span>&gt;</span><input id="paletteInput" type="text" autocomplete="off" spellcheck="false" placeholder="Type a command, or try: status" aria-label="Command"></div>
+    <ul class="palette__list" id="paletteList" role="listbox"></ul>
+    <pre class="palette__out" id="paletteOut" hidden></pre>
+    <p class="palette__foot"><kbd>↑</kbd><kbd>↓</kbd> move <kbd>Enter</kbd> run <kbd>Esc</kbd> close</p>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<noscript><style>.hero__canvas,.pipe__flow{display:none}</style></noscript>
+<script type="module" src="/assets/js/main.js"></script>
+</body>
+</html>

@@ -209,8 +209,8 @@ const COMMANDS = [
   { t: '03 · Parity', k: 'nav', run: go('parity') },
   { t: '04 · Lumina', k: 'nav', run: go('lumina') },
   { t: 'Contact', k: 'nav', run: go('contact') },
-  { t: 'About me and how I work', k: 'open', run: () => { close(); location.href = 'about/'; } },
-  { t: 'Open Lumina, the live app', k: 'open', run: () => { close(); window.open('lumina/', '_blank', 'noopener'); } },
+  { t: 'About me and how I work', k: 'open', run: () => { close(); location.href = '/'; } },
+  { t: 'Open Lumina, the live app', k: 'open', run: () => { close(); window.open('/lumina/', '_blank', 'noopener'); } },
   { t: 'Replay the FLYX trade', k: 'demo', run: () => { go('hindsight')(); setTimeout(() => dispatchEvent(new CustomEvent('trade:replay')), 700); } },
   { t: 'Jump the bot replay to the WETO incident', k: 'demo', run: () => { go('parity')(); setTimeout(() => dispatchEvent(new CustomEvent('mission:incident')), 700); } },
   { t: 'python -m live_bot status', k: 'cli', run: status },
@@ -239,7 +239,7 @@ function render() {
 function print(text) { pOut.hidden = false; pOut.textContent = text; }
 async function status() {
   try {
-    const d = await fetchJSON('data/parity.json');
+    const d = await fetchJSON('/data/parity.json');
     const rows = d.sessions.map((s) => `${s.date}  ${String(fmt(s.events)).padStart(7)}  ${String(s.tracked).padStart(7)}  ${String(s.seen).padStart(4)}  ${String(s.intended).padStart(8)}  ${String(s.closed).padStart(6)}`);
     print(`$ python -m live_bot status\ndate          events  tracked  seen  intended  closed\n${rows.join('\n')}\n\n${d.totals.sessions} sessions · ${d.totals.mb} MB of JSONL · account ids never leave the box`);
   } catch { print('status: data unavailable'); }

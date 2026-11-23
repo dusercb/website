@@ -103,7 +103,7 @@ export async function init() {
   const hero = canvas.parentElement;
   const clockEl = document.getElementById('heroClock');
   const tipEl = document.getElementById('heroTip');
-  const data = await fetchJSON('data/hero.json');
+  const data = await fetchJSON('/data/hero.json');
   const ridges = arrange(data.series);
   const N = ridges.length, M = data.n, start = data.startMin * 60;
 

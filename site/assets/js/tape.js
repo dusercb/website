@@ -425,7 +425,7 @@ function calendar(canvas, tip, data) {
 }
 
 export async function init(section) {
-  const data = await fetchJSON('data/tape.json');
+  const data = await fetchJSON('/data/tape.json');
   feedDemo($('#tapeCanvas', section), data.demo, { frames: $('#tapeFrames'), unique: $('#tapeUnique'), rejected: $('#tapeRejected') });
   calendar($('#calCanvas', section), $('#calTip', section), data);
 }

@@ -212,7 +212,7 @@ function wires(root) {
 
 export async function init(section) {
   wires(section);
-  const d = await fetchJSON('data/parity.json');
+  const d = await fetchJSON('/data/parity.json');
   const sha = d.events.find((e) => e[1] === 'session_meta')?.[3]?.sha;
   if (sha) $('#missionSha', section).textContent = `signal_core@${sha}`;
   mission(section, d);

@@ -180,7 +180,7 @@ function phone(root) {
   const screen = $('.phone__screen', root);
   btn.addEventListener('click', () => {
     const f = document.createElement('iframe');
-    f.src = 'lumina/';
+    f.src = '/lumina/';
     f.title = 'Lumina, running live';
     f.allow = 'clipboard-write; web-share';
     screen.append(f);
@@ -208,7 +208,7 @@ function tools(root, d) {
 }
 
 export async function init(section) {
-  const d = await fetchJSON('data/lumina.json');
+  const d = await fetchJSON('/data/lumina.json');
   faceDemo(section, d);
   phone(section);
   tools(section, d);

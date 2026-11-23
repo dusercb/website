@@ -593,7 +593,7 @@ function monteCarlo(root, d) {
 }
 
 export async function init(section) {
-  const d = await fetchJSON('data/hindsight.json');
+  const d = await fetchJSON('/data/hindsight.json');
   tradeReplay(section, d);
   microscope(section, d);
   funnel(section, d);
