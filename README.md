@@ -38,7 +38,8 @@ node tools/serve.mjs     # http://localhost:8080
 ```
 site/
   index.html          content and structure
-  assets/css/         one stylesheet; the Lumina section re-themes itself
+  about/              the About page: skills, ways of working, background
+  assets/css/         site.css (the Lumina section re-themes itself) and about.css
   assets/js/          main.js, hero.js (WebGL), tape.js, hindsight.js, parity.js, lumina.js, util.js
   assets/fonts/       self-hosted fonts
   data/               the JSON every figure is drawn from

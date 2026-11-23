@@ -209,6 +209,7 @@ const COMMANDS = [
   { t: '03 · Parity', k: 'nav', run: go('parity') },
   { t: '04 · Lumina', k: 'nav', run: go('lumina') },
   { t: 'Contact', k: 'nav', run: go('contact') },
+  { t: 'About me and how I work', k: 'open', run: () => { close(); location.href = 'about/'; } },
   { t: 'Open Lumina, the live app', k: 'open', run: () => { close(); window.open('lumina/', '_blank', 'noopener'); } },
   { t: 'Replay the FLYX trade', k: 'demo', run: () => { go('hindsight')(); setTimeout(() => dispatchEvent(new CustomEvent('trade:replay')), 700); } },
   { t: 'Jump the bot replay to the WETO incident', k: 'demo', run: () => { go('parity')(); setTimeout(() => dispatchEvent(new CustomEvent('mission:incident')), 700); } },

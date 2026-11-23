@@ -161,6 +161,7 @@ em { font-style: italic; }
 .nav__links a.is-active b { color: var(--hot); }
 .nav__clock { display: flex; gap: 6px; align-items: baseline; font: 500 13px/1 var(--f-mono); font-variant-numeric: tabular-nums; color: var(--ink); min-width: 92px; }
 .nav__et { font-size: 10px; color: var(--hot); letter-spacing: 0.08em; }
+.nav__about { display: none; }
 .nav__cmd { display: inline-flex; gap: 3px; padding: 6px; border: 0; background: none; cursor: pointer; }
 .nav__progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; }
 .nav__progress i { display: block; height: 100%; width: 100%; background: var(--hot); transform-origin: 0 50%; transform: scaleX(0); }
@@ -631,6 +632,9 @@ em { font-style: italic; }
 @media (max-width: 900px) {
   .nav__links { display: none; }
   .nav__clock { margin-left: auto; }
+  /* The section links are hidden on small screens; the About link stays. */
+  .nav__about { display: inline-flex; margin-left: auto; padding: 8px 4px; font: 500 13.5px/1 var(--f-sans); color: var(--ink-2); text-decoration: none; }
+  .nav__about + .nav__clock { margin-left: 0; }
   .pipe { grid-template-columns: 1fr; justify-items: start; gap: 6px; }
   .pipe__io { text-align: left; padding-left: 4px; }
   .pipe__io br { display: none; }

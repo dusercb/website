@@ -16,7 +16,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.normpath(os.path.join(HERE, "..", "site"))
 STATE = os.path.join(HERE, ".site_config.json")
-FILES = ["index.html", "robots.txt", "sitemap.xml"]
+FILES = ["index.html", "about/index.html", "robots.txt", "sitemap.xml"]
 PLACEHOLDERS = {
     "domain": "https://YOUR-DOMAIN",
     "linkedin": "https://www.linkedin.com/in/YOUR-LINKEDIN",
